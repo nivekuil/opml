@@ -96,10 +96,31 @@ pub enum OpmlError {
     XmlError(#[from] DeError),
 }
 
-// #[cfg(test)]
-// mod tests {
-//     #[test]
-//     fn it_works() {
-//         assert_eq!(2 + 2, 4);
-//     }
-// }
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn basic() {
+        bad("<opml><head></head><body><outline><text></text></outline></body></opml>");
+        bad("<head></head><body><outline><text></text></outline></body>");
+        ok("<opml version='2.0'><head></head><body><outline><text></text></outline></body></opml>");
+        ok("<opml version='x'><head></head><body><outline><text></text></outline></body></opml>");
+        bad("<opml version='x'><head></head><body><outline></outline></body></opml>");
+        bad("<opml version='x'><head></head><body><outline></outline></body></opml>");
+        bad("<opml version='x'><head></head><body></body></opml>");
+        bad("<opml version='x'></opml>");
+        bad("<opml></opml>");
+    }
+
+    #[test]
+    fn multi_outline() {
+        ok("<opml version='x'><head></head><body><outline><text></text></outline><outline><text></text></outline><outline><text></text></outline></body></opml>");
+        ok("<opml version='x'><head></head><body><outline><text></text></outline><outline><text></text><outline><text></text></outline></outline></body></opml>");
+    }
+
+    fn bad(xml: &str) {
+        assert!(crate::parse(xml).is_err());
+    }
+    fn ok(xml: &str) {
+        assert!(crate::parse(xml).is_ok());
+    }
+}
