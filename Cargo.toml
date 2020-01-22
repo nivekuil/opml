@@ -5,7 +5,7 @@ authors = ["Kevin Liu <mail@nivekuil.com>"]
 edition = "2018"
 description = "Library for working with OPML 2.0"
 repository = "https://github.com/nivekuil/opml"
-license = "Apache-2.0"
+license = "MPL-2.0"
 
 [dependencies]
 thiserror = "1.0"
