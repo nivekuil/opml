@@ -1,4 +1,5 @@
-use derive_builder::Builder;
+#[macro_use]
+extern crate derive_builder;
 use quick_xml::de::from_str;
 use quick_xml::de::DeError;
 use quick_xml::se::to_string;
@@ -7,6 +8,7 @@ use std::collections::HashMap;
 use thiserror::Error;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename = "opml")]
 pub struct Opml {
     pub version: String,
     pub head: Head,
@@ -41,16 +43,15 @@ pub struct Head {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Default)]
 pub struct Body {
-    #[serde(rename = "outline")]
-    pub outlines: Vec<Outline>,
+    pub outline: Vec<Outline>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Builder, Default)]
+#[builder(default)]
 #[serde(rename_all = "camelCase")]
 pub struct Outline {
     text: String,
-    #[serde(rename = "outline")]
-    outlines: Option<Vec<Outline>>,
+    outline: Option<Vec<Outline>>,
     #[serde(rename = "type")]
     type_: Option<String>,
     xml_url: Option<String>,
@@ -72,7 +73,7 @@ impl Opml {
     pub fn get_xml_urls(&self) -> Result<Vec<String>, OpmlError> {
         let mut res: Vec<String> = Vec::new();
         let acc: &mut Vec<Outline> = &mut Vec::new();
-        for o in &self.body.outlines {
+        for o in &self.body.outline {
             flatten(&o, acc);
         }
         for o in acc {
@@ -97,7 +98,7 @@ impl Opml {
 
 fn flatten(input: &Outline, mut acc: &mut Vec<Outline>) {
     acc.push(input.clone());
-    if let Some(ref children) = input.outlines {
+    if let Some(ref children) = input.outline {
         for child in children {
             flatten(child, &mut acc);
         }
