@@ -1,9 +1,10 @@
+use derive_builder::Builder;
 use quick_xml::de::from_str;
 use quick_xml::de::DeError;
+use quick_xml::se::to_string;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use thiserror::Error;
-use derive_builder::Builder;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Opml {
@@ -87,6 +88,10 @@ impl Opml {
             }
         }
         Ok(res)
+    }
+
+    pub fn to_string(&self) -> Result<String, OpmlError> {
+        Ok(to_string(self)?)
     }
 }
 
