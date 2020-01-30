@@ -3,12 +3,13 @@ use quick_xml::de::DeError;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use thiserror::Error;
+use derive_builder::Builder;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Opml {
-    version: String,
-    head: Head,
-    body: Body,
+    pub version: String,
+    pub head: Head,
+    pub body: Body,
 }
 
 impl Default for Opml {
@@ -24,26 +25,26 @@ impl Default for Opml {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct Head {
-    title: Option<String>,
-    date_created: Option<String>,
-    date_modified: Option<String>,
-    owner_name: Option<String>,
-    owner_email: Option<String>,
-    owner_id: Option<String>,
-    docs: Option<String>,
-    expansion_state: Option<String>,
-    vert_scroll_state: Option<String>,
-    window_top: Option<String>,
-    window_bottom: Option<String>,
+    pub title: Option<String>,
+    pub date_created: Option<String>,
+    pub date_modified: Option<String>,
+    pub owner_name: Option<String>,
+    pub owner_email: Option<String>,
+    pub owner_id: Option<String>,
+    pub docs: Option<String>,
+    pub expansion_state: Option<String>,
+    pub vert_scroll_state: Option<String>,
+    pub window_top: Option<String>,
+    pub window_bottom: Option<String>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Default)]
 pub struct Body {
     #[serde(rename = "outline")]
-    outlines: Vec<Outline>,
+    pub outlines: Vec<Outline>,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Builder, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct Outline {
     text: String,
