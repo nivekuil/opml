@@ -11,7 +11,17 @@ pub struct Opml {
     body: Body,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+impl Default for Opml {
+    fn default() -> Self {
+        Opml {
+            version: "2.0".into(),
+            head: Head::default(),
+            body: Body::default(),
+        }
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct Head {
     title: Option<String>,
@@ -27,7 +37,7 @@ pub struct Head {
     window_bottom: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Default)]
 pub struct Body {
     #[serde(rename = "outline")]
     outlines: Vec<Outline>,
